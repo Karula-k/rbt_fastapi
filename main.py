@@ -1,42 +1,36 @@
-from typing import Union
-from fastapi import FastAPI, Form, File, UploadFile
+from fastapi import FastAPI
 from pydantic import BaseModel
-
-from test_black_tree import Node, RedBlackTree
+from controler.red_black_tree_controller import RedBlackTreeController as rdbc
 
 app = FastAPI()
 
-global RBT,lst
-RBT = RedBlackTree()
-lst = []
-class Item(BaseModel):
-    id : int #id 
-    name :str
-    quantity: int
-    #optional
-    harga :str
+class Barang(BaseModel):
+    id_barang : int
+    nama_barang : str
+    harga :int
 
-@app.get('/read')
-async def read_root():
+global rdb_controller
+rdb_controller = rdbc()
+
+@app.on_event("startup")
+async def startup_event():
+    rdb_controller.on_startsup()
     
-    return RBT.sorted_data()
-
-
 @app.get('/')
-async def home():
-    return {"test": "test"}
+async def read_root():
+    return rdb_controller.get_sorted_data()
 
-@app.post("/items/")
-async def add_item(item: Item):
-    RBT.insert(item.id)
-    lst.append(item)
-    return {"added": item.id}
-@app.put("/items/")
-async def edit_item(item:Item):
-    lst.append(item)
-    RBT.edit(item.id)
-    return {"added": item.id}
-@app.delete("/items/")
-async def edit_item(item:Item):
-    RBT.delete(item.id)
-    return {"added": item.id}
+@app.post("/barang/")
+async def add_item(barang: Barang):
+    rdb_controller.insert_item(barang)
+    return {"added": barang.id_barang}
+
+@app.put("/barang/{id}")
+async def edit_barang(id: int, barang: Barang):
+    rdb_controller.edit_item(id, barang)
+    return {"added": barang.id_barang}
+
+@app.delete("/barang/{id}")
+async def delete_barang(id: int):
+    rdb_controller.delete_item(id)
+    return {"delete": id}
