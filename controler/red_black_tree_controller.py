@@ -19,7 +19,7 @@ class RedBlackTreeController:
     def insert_item(self, barang):
         try:
             item = rdbBarang(barang.id_barang, barang.nama_barang, barang.harga)
-            self.db.add_items(barang.nama_barang, barang.harga)
+            self.db.add_items(barang.id_barang,barang.nama_barang, barang.harga)
             self.rbt.insert(item)
         except Error as e:
             print(f"Error during insertion: {e}")
@@ -27,14 +27,14 @@ class RedBlackTreeController:
     def edit_item(self, id, new_barang):
         try:
             self.db.edit_data(new_barang.nama_barang, new_barang.harga, id)
-            self.rbt.edit(id, new_barang.id_barang)
+            self.rbt.edit(id, new_barang)
         except Error as e:
             print(f"Error during editing: {e}")
 
     def delete_item(self, id):
         try:
             self.db.delete_item(id)
-            self.rbt.delete(id)
+            self.rbt.delete_node(id)
         except Error as e:
             print(f"Error during deletion: {e}")
 

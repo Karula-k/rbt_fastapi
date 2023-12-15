@@ -1,3 +1,5 @@
+import os
+import uvicorn
 from fastapi import FastAPI
 from pydantic import BaseModel
 from controler.red_black_tree_controller import RedBlackTreeController as rdbc
@@ -34,3 +36,7 @@ async def edit_barang(id: int, barang: Barang):
 async def delete_barang(id: int):
     rdb_controller.delete_item(id)
     return {"delete": id}
+
+port = os.environ.get("PORT", 8080)
+print(f"Listening to http://0.0.0.0:{port}")
+uvicorn.run(app, host='0.0.0.0',port=port)

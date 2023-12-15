@@ -10,10 +10,10 @@ class DataSource:
             create_text = f"CREATE TABLE IF NOT EXISTS {self.table_name} (id INTEGER PRIMARY KEY, name TEXT, harga INTEGER)"
             cur.execute(create_text)
 
-    def add_items(self, nama_barang, harga):
+    def add_items(self,id, nama_barang, harga):
         with sqlite3.connect(self.db_name) as con:
             cur = con.cursor()
-            cur.execute(f"INSERT INTO {self.table_name} VALUES (NULL, ?, ?)", (nama_barang, harga))
+            cur.execute(f"INSERT INTO {self.table_name} VALUES (?, ?, ?)", (id,nama_barang, harga))
             con.commit()
 
     def view_data(self):
