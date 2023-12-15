@@ -4,6 +4,7 @@ import 'package:http/http.dart' as http;
 
 class ApiService {
   final String _baseUrl = 'http://192.168.1.7:8080';
+  // final String _baseUrl = 'http://10.132.12.63:8080';
 
   Future<List<Barang>> readData() async {
     var endpoint = '$_baseUrl/';
